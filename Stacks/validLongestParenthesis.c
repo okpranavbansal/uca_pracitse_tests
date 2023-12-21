@@ -1,101 +1,149 @@
-typedef struct stack
-{
-    int size;
-    int top;
-    int *arr;
-} stack;
+#include <stdio.h>
+#include <stdlib.h>
 
-void push(struct stack *ptr, int num)
-{
-    if (ptr->top == (ptr->size - 1))
-    {
-        printf("\nOverflow");
-    }
-    else
-    {
-        ptr->top += 1;
-        ptr->arr[ptr->top] = num;
-    }
-}
+// typedef struct stack
+// {
+//     int size;
+//     int top;
+//     int *arr;
+// } stack;
 
-void pop(struct stack *ptr)
-{
-    if (ptr->top == -1)
-    {
-        printf("\nUnderflow");
-    }
-    else
-    {
-        // printf("popped");
-        ptr->arr[ptr->top] = -1;
-        ptr->top -= 1;
-    }
-}
+// void push(struct stack *ptr, int num)
+// {
+//     if (ptr->top == (ptr->size - 1))
+//     {
+//         printf("\nOverflow");
+//     }
+//     else
+//     {
+//         ptr->top += 1;
+//         ptr->arr[ptr->top] = num;
+//     }
+// }
 
-void printStack(struct stack *ptr)
-{
-    for (int i = ptr->top; i >= 0; i--)
-    {
-        printf("%d", ptr->arr[i]);
-    }
-    printf("\n");
-}
+// void pop(struct stack *ptr)
+// {
+//     if (ptr->top == -1)
+//     {
+//         printf("\nUnderflow");
+//     }
+//     else
+//     {
+//         // printf("popped");
+//         ptr->arr[ptr->top] = -1;
+//         ptr->top -= 1;
+//     }
+// }
+
+// void printStack(struct stack *ptr)
+// {
+//     for (int i = ptr->top; i >= 0; i--)
+//     {
+//         printf("%d", ptr->arr[i]);
+//     }
+//     printf("\n");
+// }
+
+// int longestValidParentheses(char *s)
+// {
+//     stack *st = (stack *)malloc(sizeof(stack));
+//     st->size = 30000;
+//     st->top = -1;
+//     st->arr = (int *)malloc((st->size) * sizeof(int));
+//     int i = 0;
+//     while (s[i] != '\0')
+//     {
+//         if (s[i] == '(')
+//         {
+//             push(st, i);
+//         }
+//         else if ((st->top != -1) && (s[i] == ')' && s[st->arr[st->top]] == '('))
+//         {
+//             // printf("popped");
+//             pop(st);
+//         }
+//         else
+//         {
+//             push(st, i);
+//         }
+//         // printf("%d" , st->top);
+//         i++;
+//     }
+//     printStack(st);
+
+//     int max = i;
+
+//     if (st->top == -1)
+//     {
+//         return max;
+//     }
+//     else
+//     {
+//         int start;
+//         int end = i;
+//         max = 0;
+
+//         while (st->top != -1)
+//         {
+//             start = st->arr[st->top];
+//             if (max < end - start - 1)
+//             {
+//                 max = end - start - 1;
+//             }
+//             end = start;
+//             st->top -= 1;
+//         }
+//         if (end > max)
+//         {
+//             return end;
+//         }
+//     }
+
+//     return max;
+// }
+
+//*************
 
 int longestValidParentheses(char *s)
 {
-    stack *st = (stack *)malloc(sizeof(stack));
-    st->size = 30000;
-    st->top = -1;
-    st->arr = (int *)malloc((st->size) * sizeof(int));
+    int arr[30000];
+    int top = -1;
     int i = 0;
     while (s[i] != '\0')
     {
-        if (s[i] == '(')
+        if ((top != -1) && (s[i] == ')' && s[arr[top]] == '('))
         {
-            push(st, i);
-        }
-        else if ((st->top != -1) && (s[i] == ')' && s[st->arr[st->top]] == '('))
-        {
-            // printf("popped");
-            pop(st);
+            top -= 1;
         }
         else
         {
-            push(st, i);
+            top += 1;
+            arr[top] = i;
         }
-        // printf("%d" , st->top);
         i++;
     }
-    printStack(st);
-
-    int max = i;
-
-    if (st->top == -1)
+    for (int i = top; i >= 0; i--)
     {
-        return max;
-    }
-    else
-    {
-        int start;
-        int end = i;
-        max = 0;
-
-        while (st->top != -1)
-        {
-            start = st->arr[st->top];
-            if (max < end - start - 1)
-            {
-                max = end - start - 1;
-            }
-            end = start;
-            st->top -= 1;
-        }
-        if (end > max)
-        {
-            return end;
-        }
+        printf("%d", arr[i]);
     }
 
+    int max = 0;
+    int start = 0;
+    int end = i;
+    while (top > -1)
+    {
+        start = arr[top];
+        if (max < end - start - 1)
+        {
+            max = end - start - 1;
+        }
+        end = start;
+        top--;
+    }
+    if (max < end)
+    {
+        max = end;
+    }
     return max;
 }
 
